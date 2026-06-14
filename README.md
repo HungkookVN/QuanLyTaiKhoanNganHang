@@ -1,4 +1,4 @@
-# 🏦 Hệ Thống Quản Lý Tài Khoản Ngân Hàng (Bank Management System)
+# Hệ Thống Quản Lý Tài Khoản Ngân Hàng (Bank Management System)
 
 [![C++](https://img.shields.io/badge/Language-C++-blue.svg)](https://isocpp.org/)
 [![Status](https://img.shields.io/badge/Status-Completed-success.svg)]()
@@ -10,7 +10,7 @@
 
 ---
 
-## 🚀 Các Tính Năng Cốt Lõi (Features)
+## Các Tính Năng Cốt Lõi (Features)
 
 * **Quản lý Tài khoản:**
     * Đăng ký tài khoản mới (Cấp số dư mặc định 50,000 VNĐ).
@@ -27,7 +27,7 @@
 
 ---
 
-## 🛠 Kỹ Thuật Áp Dụng (Technical Details)
+## Kỹ Thuật Áp Dụng (Technical Details)
 
 Dự án được xây dựng với mục tiêu rèn luyện tư duy lập trình và quản lý bộ nhớ:
 
