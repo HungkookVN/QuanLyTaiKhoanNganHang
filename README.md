@@ -37,16 +37,3 @@ Dự án được xây dựng với mục tiêu rèn luyện tư duy lập trìn
 * **Kiến trúc mã nguồn:** Mã nguồn được module hóa thông qua các hàm bổ trợ (Helper functions) giúp giảm thiểu sự lặp lại mã (DRY - Don't Repeat Yourself).
 
 ---
-
-## 📂 Cấu Trúc Thư Mục (Repository Structure)
-
-```text
-├── src/
-│   └── main.cpp           # Mã nguồn chính của chương trình
-├── data/
-│   ├── KhachHang.txt      # Tệp lưu trữ dữ liệu Khách hàng
-│   ├── TaiKhoan.txt       # Tệp lưu trữ thông tin Tài khoản & Mã PIN
-│   └── GiaoDich.txt       # Tệp lưu trữ Lịch sử giao dịch
-├── docs/
-│   └── BaoCaoCuoiKy.pdf   # Báo cáo đồ án chi tiết (Có Test Cases)
-└── README.md              # File mô tả dự án
