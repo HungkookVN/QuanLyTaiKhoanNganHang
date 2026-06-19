@@ -35,6 +35,39 @@ int SLKH=0;
 int SLTK=0;
 int SLGD=0;
 
+void Data()
+{
+    ifstream inp("Test.inp");
+    int n;inp>>n;
+    if(n>0)
+    {
+        for(int i=0;i<n;i++)
+        {
+            KhachHang default_KH;
+            TaiKhoan default_TK;
+
+            getline(inp,default_KH.MaKH);
+            getline(inp,default_KH.HoTen);
+            getline(inp,default_KH.SDT);
+            getline(inp,default_KH.SoCCCD);
+            getline(inp,default_TK.MaKH);
+            getline(inp,default_TK.SoTaiKhoan);
+            getline(inp,default_TK.TenChuThe);
+            getline(inp,default_TK.MaPin);
+            inp>>default_TK.SoDu;
+            dsKH[i].MaKH=default_KH.MaKH;
+            dsKH[i].HoTen=default_KH.HoTen;
+            dsKH[i].SDT=default_KH.SDT;
+            dsKH[i].SoCCCD=default_KH.SoCCCD;
+            dsTK[i].MaKH=default_TK.MaKH;
+            dsTK[i].SoTaiKhoan=default_TK.SoTaiKhoan;
+            dsTK[i].TenChuThe=default_TK.TenChuThe;
+            dsTK[i].MaPin=default_TK.MaPin;
+            dsTK[i].SoDu=default_TK.SoDu;
+        }
+    }
+}
+
 // Lấy thời gian hiện tại của hệ thống dưới dạng chuỗi
 string LayThoiGianHienTai() {
     time_t now = time(0);
@@ -344,8 +377,10 @@ void TaoTK() {
 
 int main()
 {
+    Data();
     int LuaChon;
     bool HoatDong = true;
+    bool TrangThaiDangNhap = false;
     while(HoatDong){
         cout << "\n=========================================";
         cout << "\n      HE THONG QUAN LY NGAN HANG         ";
@@ -361,24 +396,45 @@ int main()
         cout << "\nNhap lua chon cua ban: ";
         cin >> LuaChon;
 
-        switch(LuaChon){
+    switch(LuaChon){
         case 1:
             DangNhap();
+            TrangThaiDangNhap=true;
             break;
         case 2:
-            NapTien();
+            if(TrangThaiDangNhap==false)
+            {
+                cout<<"Ban chua dang nhap!";
+                break;
+            }
+            TaoTK();
             break;
         case 3:
-            RutTien();
+            if(TrangThaiDangNhap==false)
+            {
+                cout<<"Ban chua dang nhap!";
+                break;
+            }
+            NapTien();
             break;
         case 4:
-            ChuyenKhoan();
+            if(TrangThaiDangNhap==false)
+            {
+                cout<<"Ban chua dang nhap!";
+                break;
+            }
+            RutTien();
             break;
         case 5:
-            SaoKe();
+            if(TrangThaiDangNhap==false)
+            {
+                cout<<"Ban chua dang nhap!";
+                break;
+            }
+            ChuyenKhoan();
             break;
         case 6:
-            TaoTK();
+            SaoKe();
             break;
         case 0:
             //Ghi đè toàn bộ dữ liệu từ 3 danh sách xuống lại file txt
