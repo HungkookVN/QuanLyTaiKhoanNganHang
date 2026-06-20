@@ -69,8 +69,8 @@ string LayThoiGianHienTai() {
     time_t now = time(0);
     tm *ltm = localtime(&now);
     char buffer[25];
-    sprintf(buffer, "%02d/%02d/%04d %02d:%02d:%02d",
-            ltm->tm_mday, 1 + ltm->tm_mon, 1900 + ltm->tm_year,
+    sprintf(buffer, "%04d/%02d/%02d %02d:%02d:%02d",
+            1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday,
             ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
     return string(buffer);
 }
@@ -277,16 +277,13 @@ void SaoKe(int viTri) {
 
     for (int i = 0; i < SLGD; i++) {
         if (dsGD[i].SoTaiKhoanGoc == dsTK[viTri].SoTaiKhoan || dsGD[i].SoTaiKhoanDich == dsTK[viTri].SoTaiKhoan) {
-            // Cắt 10 ký tự đầu của chuỗi thời gian (YYYY/MM/DD) để so sánh
+        if (dsGD[i].ThoiGian.length() >= 10) {
             string ngayGiaoDich = dsGD[i].ThoiGian.substr(0, 10);
-
-            // Lọc theo khoảng thời gian nếu người dùng không chọn ALL
             if (ngayBatDau != "ALL") {
                 if (ngayGiaoDich < ngayBatDau || ngayGiaoDich > ngayKetThuc) {
-                    continue; // Bỏ qua giao dịch nằm ngoài khoảng
+                    continue; 
                 }
             }
-
             coGiaoDich = true;
             cout << "[" << dsGD[i].ThoiGian << "] - Ma GD: " << dsGD[i].MaGiaoDich << "\n";
 
@@ -426,7 +423,7 @@ int main()
             //Ghi đè toàn bộ dữ liệu từ 3 danh sách xuống lại file txt
             //Save();
             cout << "Da luu du lieu. Hen gap lai!\n";
-            break;
+            return 0;
         default:
             cout << "Lua chon khong hop le. Vui long thu lai!\n";
         }
