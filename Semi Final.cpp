@@ -35,12 +35,13 @@ int SLKH=0;
 int SLTK=0;
 int SLGD=0;
 
-void Data()
+void Data() //Thay thẳng data vào file inp để update
 {
     ifstream inp("Test.inp");
     int n;inp>>n;
     if(n>0)
     {
+        inp.ignore();
         for(int i=0;i<n;i++)
         {
             KhachHang default_KH;
@@ -55,6 +56,7 @@ void Data()
             getline(inp,default_TK.TenChuThe);
             getline(inp,default_TK.MaPin);
             inp>>default_TK.SoDu;
+            inp.ignore();
             dsKH[i].MaKH=default_KH.MaKH;
             dsKH[i].HoTen=default_KH.HoTen;
             dsKH[i].SDT=default_KH.SDT;
@@ -66,6 +68,9 @@ void Data()
             dsTK[i].SoDu=default_TK.SoDu;
         }
     }
+
+    SLTK=n;
+    SLKH=n;
 }
 
 // Lấy thời gian hiện tại của hệ thống dưới dạng chuỗi
@@ -109,7 +114,7 @@ int TimTaiKhoan(string soTK)
     return -1;
 }
 
-void DangNhap() {
+void DangNhap(bool &TrangThaiDangNhap, int &TKDangHoatDong) {
     string soTK, maPin;
     cout << "--- DANG NHAP HE THONG ---\n";
     cout << "Nhap So tai khoan: ";
@@ -128,6 +133,8 @@ void DangNhap() {
     if (dsTK[viTri].MaPin == maPin) {
         cout << "=> Dang nhap thanh cong! Xin chao " << dsTK[viTri].TenChuThe << "\n";
         cout << "So du hien tai: " << dsTK[viTri].SoDu << " VND\n";
+        TrangThaiDangNhap=true;
+        TKDangHoatDong=viTri;
 
         // Ghi chú: Tại đây có thể thiết lập một biến toàn cục như `TaiKhoanDangDangNhap`
         // để lưu vết phục vụ cho các hàm Nạp/Rút/Chuyển phía sau.
@@ -136,26 +143,10 @@ void DangNhap() {
     }
 }
 
-void NapTien()
+void NapTien(int viTri)
 {
     string soTK, maPin;
     cout << "--- NAP TIEN VAO TAI KHOAN ---\n";
-    cout << "Nhap So tai khoan: ";
-    cin >> soTK;
-
-    int viTri = TimTaiKhoan(soTK);
-    if (viTri == -1) {
-        cout << "Loi: Tai khoan khong ton tai!\n";
-        return;
-    }
-
-    cout << "Nhap Ma PIN: ";
-    cin >> maPin;
-
-    if (dsTK[viTri].MaPin != maPin) {
-        cout << "Loi: Ma PIN khong chinh xac!\n";
-        return;
-    }
 
     long long tienNap;
     cout << "Nhap so tien muon nap (VND): ";
@@ -174,26 +165,10 @@ void NapTien()
     cout << "=> Nap tien thanh cong! So du moi: " << dsTK[viTri].SoDu << " VND\n";
 }
 
-void RutTien()
+void RutTien(int viTri)
 {
     string soTK, maPin;
     cout << "--- RUT TIEN MAT ---\n";
-    cout << "Nhap So tai khoan: ";
-    cin >> soTK;
-
-    int viTri = TimTaiKhoan(soTK);
-    if (viTri == -1) {
-        cout << "Loi: Tai khoan khong ton tai!\n";
-        return;
-    }
-
-    cout << "Nhap Ma PIN: ";
-    cin >> maPin;
-
-    if (dsTK[viTri].MaPin != maPin) {
-        cout << "Loi: Ma PIN khong chinh xac!\n";
-        return;
-    }
 
     long long tienRut;
     cout << "Nhap so tien muon rut (VND): ";
@@ -215,25 +190,11 @@ void RutTien()
     cout << "=> Rut tien thanh cong! So du moi: " << dsTK[viTri].SoDu << " VND\n";
 }
 
-void ChuyenKhoan()
+void ChuyenKhoan(int viTri)
 {
     string soTKGoc, soTKDich, maPin;
+    soTKGoc=dsTK[viTri].SoTaiKhoan;
     cout << "--- CHUYEN KHOAN NGAN HANG ---\n";
-
-    cout << "Nhap So tai khoan nguon: ";
-    cin >> soTKGoc;
-    int viTriGoc = TimTaiKhoan(soTKGoc);
-    if (viTriGoc == -1) {
-        cout << "Loi: Tai khoan nguon khong ton tai!\n";
-        return;
-    }
-
-    cout << "Nhap Ma PIN: ";
-    cin >> maPin;
-    if (dsTK[viTriGoc].MaPin != maPin) {
-        cout << "Loi: Ma PIN khong chinh xac!\n";
-        return;
-    }
 
     cout << "Nhap So tai khoan dich: ";
     cin >> soTKDich;
@@ -260,7 +221,7 @@ void ChuyenKhoan()
         return;
     }
 
-    if (dsTK[viTriGoc].SoDu - tienChuyen < 50000) {
+    if (dsTK[viTri].SoDu - tienChuyen < 50000) {
         cout << "Loi: So du khong du thuc hien! Phai duy tri toi thieu 50,000 VND.\n";
         return;
     }
@@ -270,52 +231,76 @@ void ChuyenKhoan()
     cin.ignore();
     getline(cin, noiDung);
 
-    dsTK[viTriGoc].SoDu -= tienChuyen;
+    dsTK[viTri].SoDu -= tienChuyen;
     dsTK[viTriDich].SoDu += tienChuyen;
 
     // Ghi nhận giao dịch chuyển khoản
     TaoGhiNhanGiaoDich(soTKGoc, soTKDich, "CHUYEN", tienChuyen, noiDung);
 
     cout << "=> Chuyen khoan thanh cong!\n";
-    cout << "So du moi cua ban: " << dsTK[viTriGoc].SoDu << " VND\n";
+    cout << "So du moi cua ban: " << dsTK[viTri].SoDu << " VND\n";
 }
 
-void SaoKe()
-{
-    string soTK, maPin;
-    cout << "--- SAO KE GIAO DICH ---\n";
-    cout << "Nhap So tai khoan: ";
-    cin >> soTK;
+void TinhLaiSuat(int viTri) {
+    cout << "--- TINH LAI SUAT TIEN GUI KHONG KY HAN ---\n";
 
-    int viTri = TimTaiKhoan(soTK);
-    if (viTri == -1) {
-        cout << "Loi: Tai khoan khong ton tai!\n";
+    int soThang;
+    cout << "Nhap so thang da gui (de mo phong chot lai): ";
+    cin >> soThang;
+
+    if (soThang <= 0) {
+        cout << "Loi: So thang phai lon hon 0!\n";
         return;
     }
 
-    cout << "Nhap Ma PIN de xac thuc in sao ke: ";
-    cin >> maPin;
+    // Giả sử lãi suất không kỳ hạn là 0.2% / tháng (tương đương 2.4% / năm)
+    double laiSuatThang = 0.002;
+    long long tienLai = dsTK[viTri].SoDu * laiSuatThang * soThang;
 
-    if (dsTK[viTri].MaPin != maPin) {
-        cout << "Loi: Ma PIN khong chinh xac!\n";
-        return;
+    dsTK[viTri].SoDu += tienLai;
+
+    // Ghi nhận giao dịch nhận lãi
+    TaoGhiNhanGiaoDich(dsTK[viTri].SoTaiKhoan, "N/A", "NHAN_LAI", tienLai, "Tra lai tien gui khong ky han " + to_string(soThang) + " thang");
+
+    cout << "=> Da cong tien lai: " << tienLai << " VND vao tai khoan.\n";
+    cout << "So du moi: " << dsTK[viTri].SoDu << " VND\n";
+}
+
+void SaoKe() {
+    string ngayBatDau, ngayKetThuc;
+    cout << "--- SAO KE GIAO DICH ---\n";
+
+    cout << "Nhap ngay bat dau (YYYY/MM/DD) hoac nhap ALL de xem toan bo: ";
+    cin >> ngayBatDau;
+
+    if (ngayBatDau != "ALL") {
+        cout << "Nhap ngay ket thuc (YYYY/MM/DD): ";
+        cin >> ngayKetThuc;
     }
 
     cout << "\n================ LICH SU GIAO DICH ================\n";
-    cout << "Tai khoan: " << dsTK[viTri].TenChuThe << " | So TK: " << soTK << "\n";
+    cout << "Tai khoan: " << dsTK[viTri].TenChuThe << " | So TK: " << dsTK[viTri].SoTaiKhoan << "\n";
     cout << "---------------------------------------------------\n";
 
     bool coGiaoDich = false;
 
-    // Duyệt mảng giao dịch để lọc
     for (int i = 0; i < SLGD; i++) {
-        // Kiểm tra xem tài khoản này có liên quan đến giao dịch không (gốc hoặc đích)
         if (dsGD[i].SoTaiKhoanGoc == soTK || dsGD[i].SoTaiKhoanDich == soTK) {
+            // Cắt 10 ký tự đầu của chuỗi thời gian (YYYY/MM/DD) để so sánh
+            string ngayGiaoDich = dsGD[i].ThoiGian.substr(0, 10);
+
+            // Lọc theo khoảng thời gian nếu người dùng không chọn ALL
+            if (ngayBatDau != "ALL") {
+                if (ngayGiaoDich < ngayBatDau || ngayGiaoDich > ngayKetThuc) {
+                    continue; // Bỏ qua giao dịch nằm ngoài khoảng
+                }
+            }
+
             coGiaoDich = true;
             cout << "[" << dsGD[i].ThoiGian << "] - Ma GD: " << dsGD[i].MaGiaoDich << "\n";
 
-            if (dsGD[i].LoaiGiaoDich == "NAP") {
-                cout << "  + " << dsGD[i].SoTien << " VND (Nap tien)\n";
+            if (dsGD[i].LoaiGiaoDich == "NAP" || dsGD[i].LoaiGiaoDich == "NHAN_LAI") {
+                cout << "  + " << dsGD[i].SoTien << " VND (" << dsGD[i].NoiDung << ")\n";
             }
             else if (dsGD[i].LoaiGiaoDich == "RUT") {
                 cout << "  - " << dsGD[i].SoTien << " VND (Rut tien)\n";
@@ -334,10 +319,11 @@ void SaoKe()
     }
 
     if (!coGiaoDich) {
-        cout << "Khong co giao dich nao trong lich su.\n";
+        cout << "Khong co giao dich nao trong khoang thoi gian nay.\n";
     }
     cout << "===================================================\n";
 }
+
 
 void TaoTK() {
     if (SLTK >= 1000005) {
@@ -378,9 +364,11 @@ void TaoTK() {
 int main()
 {
     Data();
+    //nhap();
     int LuaChon;
     bool HoatDong = true;
     bool TrangThaiDangNhap = false;
+    int TkDangHoatDong=-1;
     while(HoatDong){
         cout << "\n=========================================";
         cout << "\n      HE THONG QUAN LY NGAN HANG         ";
@@ -390,7 +378,8 @@ int main()
         cout << "\n3. Rut tien";
         cout << "\n4. Chuyen khoan";
         cout << "\n5. Xem sao ke giao dich";
-        cout << "\n6. Tao tai khoan";
+        cout << "\n6. Tinh lai suat theo thang";
+        cout << "\n7. Tao tai khoan";
         cout << "\n0. Luu du lieu va Thoat";
         cout << "\n=========================================";
         cout << "\nNhap lua chon cua ban: ";
@@ -398,8 +387,8 @@ int main()
 
     switch(LuaChon){
         case 1:
-            DangNhap();
-            TrangThaiDangNhap=true;
+            DangNhap(TrangThaiDangNhap,TkDangHoatDong);
+            cout<<"Tk dang hoat dong:"<<TkDangHoatDong;
             break;
         case 2:
             if(TrangThaiDangNhap==false)
@@ -407,7 +396,7 @@ int main()
                 cout<<"Ban chua dang nhap!";
                 break;
             }
-            TaoTK();
+            NapTien(TkDangHoatDong);
             break;
         case 3:
             if(TrangThaiDangNhap==false)
@@ -415,7 +404,7 @@ int main()
                 cout<<"Ban chua dang nhap!";
                 break;
             }
-            NapTien();
+            RutTien(TkDangHoatDong);
             break;
         case 4:
             if(TrangThaiDangNhap==false)
@@ -423,7 +412,7 @@ int main()
                 cout<<"Ban chua dang nhap!";
                 break;
             }
-            RutTien();
+            ChuyenKhoan(TkDangHoatDong);
             break;
         case 5:
             if(TrangThaiDangNhap==false)
@@ -431,10 +420,18 @@ int main()
                 cout<<"Ban chua dang nhap!";
                 break;
             }
-            ChuyenKhoan();
+            SaoKe(TkDangHoatDong);
             break;
         case 6:
-            SaoKe();
+            if(TrangThaiDangNhap==false)
+            {
+                cout<<"Ban chua dang nhap!";
+                break;
+            }
+            TinhLaiSuat(TkDangHoatDong);
+            break;
+        case 7:
+            TaoTK();
             break;
         case 0:
             //Ghi đè toàn bộ dữ liệu từ 3 danh sách xuống lại file txt
