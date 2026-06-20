@@ -313,34 +313,50 @@ void SaoKe(int viTri) {
 }
 
 void TaoTK() {
-    if (SLTK >= 1000005) {
+    if (SLTK >= 1000005 || SLKH >= 1000005) {
         cout << "He thong da dat gioi han bo nho!\n";
         return;
     }
 
     TaiKhoan tkMoi;
+    KhachHang khMoi;
+
     cout << "--- TAO TAI KHOAN MOI ---\n";
     cout << "Nhap So tai khoan: ";
     cin >> tkMoi.SoTaiKhoan;
 
+    // Kiểm tra số tài khoản đã tồn tại chưa
     if (TimTaiKhoan(tkMoi.SoTaiKhoan) != -1) {
         cout << "Loi: So tai khoan nay da ton tai!\n";
         return;
     }
+    cin.ignore(10000, '\n');
 
-    cout << "Nhap Ma Khach Hang: ";
-    cin >> tkMoi.MaKH;
+    cout << "Nhap Ho ten chu the: ";
+    getline(cin, khMoi.HoTen);
 
-    cin.ignore();
+    // Đồng nhất biến Họ Tên của Khách Hàng với Tên Chủ Thẻ của Tài Khoản
+    tkMoi.TenChuThe = khMoi.HoTen;
 
-    cout << "Nhap Ten Chu The: ";
-    getline(cin, tkMoi.TenChuThe);
+    cout << "Nhap So dien thoai: ";
+    getline(cin, khMoi.SDT);
+
+    cout << "Nhap So CCCD: ";
+    getline(cin, khMoi.SoCCCD);
+
+    // Sinh Mã Khách Hàng liên kết 2 bảng
+    string maKHMoi = "KH" + to_string(SLKH + 1);
+    khMoi.MaKH = maKHMoi;
+    tkMoi.MaKH = maKHMoi;
 
     cout << "Thiet lap Ma PIN: ";
     cin >> tkMoi.MaPin;
 
-    // Quy định số dư tối thiểu
+    // Quy định số dư tối thiểu ban đầu
     tkMoi.SoDu = 50000;
+
+    dsKH[SLKH] = khMoi;
+    SLKH++;
 
     dsTK[SLTK] = tkMoi;
     SLTK++;
