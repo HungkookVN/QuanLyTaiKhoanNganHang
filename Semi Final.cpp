@@ -129,6 +129,11 @@ void SaveGiaoDich()
     }
 }
 
+string TaoSoTaiKhoan()
+{
+
+}
+
 string LayThoiGianHienTai() {
     time_t now = time(0);
     tm *ltm = localtime(&now);
@@ -146,7 +151,9 @@ void TaoGhiNhanGiaoDich(string tkGoc, string tkDich, string loaiGD, long long so
     }
 
     GiaoDich gdMoi;
-    gdMoi.MaGiaoDich = "GD" + to_string(SLGD + 1); // Tự động tạo mã GD001, GD002...
+    stringstream ss;
+    ss << setfill('0') << setw(6) << SLGD+1;
+    gdMoi.MaGiaoDich = "GD" + ss.str(); // Tự động tạo mã GD001, GD002...
     gdMoi.SoTaiKhoanGoc = tkGoc;
     gdMoi.SoTaiKhoanDich = tkDich;
     gdMoi.LoaiGiaoDich = loaiGD;
@@ -402,7 +409,9 @@ void TaoTK() {
     getline(cin, khMoi.SoCCCD);
 
     // Sinh Mã Khách Hàng liên kết 2 bảng
-    string maKHMoi = "KH" + to_string(SLKH + 1);
+    stringstream ss;
+    ss << setfill('0') << setw(6) << SLKH+1;
+    string maKHMoi = "KH" + ss.str();
     khMoi.MaKH = maKHMoi;
     tkMoi.MaKH = maKHMoi;
 
@@ -438,7 +447,7 @@ int main()
     bool TrangThaiDangNhap = false;
     int TkDangHoatDong=-1;
     while(true){
-        cout << "=========================================";
+        cout << "\n=========================================";
         cout << "\n      HE THONG QUAN LY NGAN HANG         ";
         cout << "\n=========================================";
         cout << "\n1. Dang nhap tai khoan";
