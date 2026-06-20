@@ -47,25 +47,16 @@ void Data() //Thay thẳng data vào file inp để update
             KhachHang default_KH;
             TaiKhoan default_TK;
 
-            getline(inp,default_KH.MaKH);
-            getline(inp,default_KH.HoTen);
-            getline(inp,default_KH.SDT);
-            getline(inp,default_KH.SoCCCD);
-            getline(inp,default_TK.MaKH);
-            getline(inp,default_TK.SoTaiKhoan);
-            getline(inp,default_TK.TenChuThe);
-            getline(inp,default_TK.MaPin);
-            inp>>default_TK.SoDu;
+            getline(inp,dsKH[i].MaKH);
+            getline(inp,dsKH[i].HoTen);
+            getline(inp,dsKH[i].SDT);
+            getline(inp,dsKH[i].SoCCCD);
+            getline(inp,dsTK[i].MaKH);
+            getline(inp,dsTK[i].SoTaiKhoan);
+            getline(inp,dsTK[i].TenChuThe);
+            getline(inp,dsTK[i].MaPin);
+            inp>>dsTK[i].SoDu;
             inp.ignore();
-            dsKH[i].MaKH=default_KH.MaKH;
-            dsKH[i].HoTen=default_KH.HoTen;
-            dsKH[i].SDT=default_KH.SDT;
-            dsKH[i].SoCCCD=default_KH.SoCCCD;
-            dsTK[i].MaKH=default_TK.MaKH;
-            dsTK[i].SoTaiKhoan=default_TK.SoTaiKhoan;
-            dsTK[i].TenChuThe=default_TK.TenChuThe;
-            dsTK[i].MaPin=default_TK.MaPin;
-            dsTK[i].SoDu=default_TK.SoDu;
         }
     }
 
@@ -266,7 +257,7 @@ void TinhLaiSuat(int viTri) {
     cout << "So du moi: " << dsTK[viTri].SoDu << " VND\n";
 }
 
-void SaoKe() {
+void SaoKe(int viTri) {
     string ngayBatDau, ngayKetThuc;
     cout << "--- SAO KE GIAO DICH ---\n";
 
@@ -285,7 +276,7 @@ void SaoKe() {
     bool coGiaoDich = false;
 
     for (int i = 0; i < SLGD; i++) {
-        if (dsGD[i].SoTaiKhoanGoc == soTK || dsGD[i].SoTaiKhoanDich == soTK) {
+        if (dsGD[i].SoTaiKhoanGoc == dsTK[viTri].SoTaiKhoan || dsGD[i].SoTaiKhoanDich == dsTK[viTri].SoTaiKhoan) {
             // Cắt 10 ký tự đầu của chuỗi thời gian (YYYY/MM/DD) để so sánh
             string ngayGiaoDich = dsGD[i].ThoiGian.substr(0, 10);
 
@@ -306,7 +297,7 @@ void SaoKe() {
                 cout << "  - " << dsGD[i].SoTien << " VND (Rut tien)\n";
             }
             else if (dsGD[i].LoaiGiaoDich == "CHUYEN") {
-                if (dsGD[i].SoTaiKhoanGoc == soTK) {
+                if (dsGD[i].SoTaiKhoanGoc == dsTK[viTri].SoTaiKhoan) {
                     cout << "  - " << dsGD[i].SoTien << " VND (Chuyen den: " << dsGD[i].SoTaiKhoanDich << ")\n";
                     cout << "  Noi dung: " << dsGD[i].NoiDung << "\n";
                 } else {
@@ -323,7 +314,6 @@ void SaoKe() {
     }
     cout << "===================================================\n";
 }
-
 
 void TaoTK() {
     if (SLTK >= 1000005) {
@@ -366,10 +356,9 @@ int main()
     Data();
     //nhap();
     int LuaChon;
-    bool HoatDong = true;
     bool TrangThaiDangNhap = false;
     int TkDangHoatDong=-1;
-    while(HoatDong){
+    while(true){
         cout << "\n=========================================";
         cout << "\n      HE THONG QUAN LY NGAN HANG         ";
         cout << "\n=========================================";
@@ -435,8 +424,8 @@ int main()
             break;
         case 0:
             //Ghi đè toàn bộ dữ liệu từ 3 danh sách xuống lại file txt
+            //Save();
             cout << "Da luu du lieu. Hen gap lai!\n";
-            HoatDong = false;
             break;
         default:
             cout << "Lua chon khong hop le. Vui long thu lai!\n";
