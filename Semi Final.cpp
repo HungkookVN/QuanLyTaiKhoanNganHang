@@ -35,8 +35,7 @@ int SLKH=0;
 int SLTK=0;
 int SLGD=0;
 
-void DataTaiKhoan()
-{
+void DataTaiKhoan() {
     ifstream inp("DataTaiKhoan.inp");
     int n=0;
     if(inp>>n)
@@ -70,8 +69,7 @@ void DataTaiKhoan()
 
 }
 
-void SaveTaiKhoan()
-{
+void SaveTaiKhoan() {
     ofstream out("DataTaiKhoan.inp");
     int n=SLTK;out<<n<<"\n";
     for(int i=0;i<n;i++)
@@ -88,8 +86,7 @@ void SaveTaiKhoan()
     }
 }
 
-void DataGiaoDich()
-{
+void DataGiaoDich() {
     ifstream inp("DataGiaoDich.inp");
     int n=0;
     if(inp>>n)
@@ -110,11 +107,9 @@ void DataGiaoDich()
         SLGD=n;
     }
     else {SLGD=0;}
-
 }
 
-void SaveGiaoDich()
-{
+void SaveGiaoDich() {
     ofstream out("DataGiaoDich.inp");
     int n=SLGD;out<<n<<"\n";
     for(int i=0;i<n;i++)
@@ -127,11 +122,6 @@ void SaveGiaoDich()
             <<dsGD[i].NoiDung<<"\n"
             <<dsGD[i].SoTien<<"\n";
     }
-}
-
-string TaoSoTaiKhoan()
-{
-
 }
 
 string LayThoiGianHienTai() {
@@ -165,8 +155,7 @@ void TaoGhiNhanGiaoDich(string tkGoc, string tkDich, string loaiGD, long long so
     SLGD++;
 }
 
-int TimTaiKhoan(string soTK)
-{
+int TimTaiKhoan(string soTK) {
     for (int i = 0; i < SLTK; i++) {
         if (dsTK[i].SoTaiKhoan == soTK) {
             return i;
@@ -204,8 +193,7 @@ void DangNhap(bool &TrangThaiDangNhap, int &TKDangHoatDong) {
     }
 }
 
-void NapTien(int viTri)
-{
+void NapTien(int viTri) {
     cout << "--- NAP TIEN VAO TAI KHOAN ---\n";
 
     long long tienNap;
@@ -225,8 +213,7 @@ void NapTien(int viTri)
     cout << "=> Nap tien thanh cong! So du moi: " << dsTK[viTri].SoDu << " VND\n";
 }
 
-void RutTien(int viTri)
-{
+void RutTien(int viTri) {
     cout << "--- RUT TIEN MAT ---\n";
 
     long long tienRut;
@@ -249,8 +236,7 @@ void RutTien(int viTri)
     cout << "=> Rut tien thanh cong! So du moi: " << dsTK[viTri].SoDu << " VND\n";
 }
 
-void ChuyenKhoan(int viTri)
-{
+void ChuyenKhoan(int viTri) {
     string soTKGoc, soTKDich;
     soTKGoc=dsTK[viTri].SoTaiKhoan;
     cout << "--- CHUYEN KHOAN NGAN HANG ---\n";
