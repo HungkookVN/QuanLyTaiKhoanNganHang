@@ -107,6 +107,7 @@ void DataGiaoDich() {
         SLGD=n;
     }
     else {SLGD=0;}
+
 }
 
 void SaveGiaoDich() {
@@ -315,12 +316,17 @@ void SaoKe(int viTri) {
     string ngayBatDau, ngayKetThuc;
     cout << "--- SAO KE GIAO DICH ---\n";
 
-    cout << "Nhap ngay bat dau (YYYY/MM/DD) hoac nhap ALL de xem toan bo: ";
+    cout << "Nhap ngay bat dau (DD/MM/YYYY) hoac nhap ALL de xem toan bo: ";
     cin >> ngayBatDau;
 
     if (ngayBatDau != "ALL") {
-        cout << "Nhap ngay ket thuc (YYYY/MM/DD): ";
+        cout << "Nhap ngay ket thuc (DD/MM/YYYY): ";
         cin >> ngayKetThuc;
+        if (ngayKetThuc<ngayBatDau)
+        {
+            cout<<"Thoi gian khong hop ly!\n";
+            return;
+        }
     }
 
     cout << "\n================ LICH SU GIAO DICH ================\n";
@@ -447,7 +453,7 @@ int main()
         cout << "\n=========================================";
         cout << "\nNhap lua chon cua ban: ";
 
-        cin >> LuaChon;
+        cin>>LuaChon;
         if(LuaChon.length()!=1)
         {
             cout << "Lua chon khong hop le. Vui long thu lai!\n";
@@ -462,7 +468,7 @@ int main()
         case '2':
             if(TrangThaiDangNhap==false)
             {
-                cout<<"Ban chua dang nhap!";
+                cout<<"Ban chua dang nhap!\n";
                 break;
             }
             NapTien(TkDangHoatDong);
@@ -470,7 +476,7 @@ int main()
         case '3':
             if(TrangThaiDangNhap==false)
             {
-                cout<<"Ban chua dang nhap!";
+                cout<<"Ban chua dang nhap!\n";
                 break;
             }
             RutTien(TkDangHoatDong);
@@ -478,7 +484,7 @@ int main()
         case '4':
             if(TrangThaiDangNhap==false)
             {
-                cout<<"Ban chua dang nhap!";
+                cout<<"Ban chua dang nhap!\n";
                 break;
             }
             ChuyenKhoan(TkDangHoatDong);
@@ -486,16 +492,15 @@ int main()
         case '5':
             if(TrangThaiDangNhap==false)
             {
-                cout<<"Ban chua dang nhap!";
+                cout<<"Ban chua dang nhap!\n";
                 break;
             }
             SaoKe(TkDangHoatDong);
-            //nhap(TkDangHoatDong);
             break;
         case '6':
             if(TrangThaiDangNhap==false)
             {
-                cout<<"Ban chua dang nhap!";
+                cout<<"Ban chua dang nhap!\n";
                 break;
             }
             TinhLaiSuat(TkDangHoatDong);
